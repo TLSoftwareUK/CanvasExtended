@@ -1,0 +1,61 @@
+﻿@inherits BasePart
+@using TLS.CanvasExtended.Backend
+@using System.Numerics
+
+@{
+    int xname = 0;
+    foreach (float x in XGrids)
+    {
+        <GridLineUIPart StartX="@x" StartY="@MinimumY" EndX="@x" EndY="@MaximumY" GridName="@xname.ToString()"/>
+        xname++;
+    }
+}
+
+@{
+    char yname = 'A';
+    foreach (float y in YGrids)
+    {
+        <GridLineUIPart StartX="@MinimumX" StartY="@y" EndX="@MaximumX" EndY="@y" GridName="@yname.ToString()"/>
+        yname++;
+    }
+}
+
+@code {
+    [Parameter] public IEnumerable<Vector2> NodeCoordinates { get; set; }
+
+    protected List<float> XGrids;
+    protected List<float> YGrids;
+
+    protected float MinimumX { get; set; } = 50;
+    protected float MaximumX { get; set; } = 250;
+    protected float MinimumY { get; set; } = 50;
+    protected float MaximumY { get; set; } = 250;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        XGrids = new List<float>();
+        YGrids = new List<float>();
+
+        foreach(Vector2 node in NodeCoordinates)
+        {
+            if(!XGrids.Any(x => x == node.X))
+            {
+                XGrids.Add(node.X);
+            }
+            if(!YGrids.Any(y => y ==node.Y))
+            {
+                YGrids.Add(node.Y);
+            }
+        }
+
+        XGrids = XGrids.OrderBy(x => x).ToList();
+        YGrids = YGrids.OrderBy(x => x).ToList();        
+    }
+
+    public override void Render(IPrimitveDrawer backend)
+    {        
+    }
+}
+

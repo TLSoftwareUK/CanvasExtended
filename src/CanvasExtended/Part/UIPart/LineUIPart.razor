@@ -1,0 +1,55 @@
+﻿@inherits BasePart
+@using TLS.CanvasExtended.Backend
+
+<div style="position: absolute; left: @(StartX)px; top: @(StartY)px">
+    <div style="position: relative;top: -50%;left: -50%">
+        @Start
+    </div>
+</div>
+
+<div style="position: absolute; left: @(MidX)px; top: @(MidY)px">
+    <div style="position: relative;top: -50%;left: -50%">
+        @Center
+    </div>
+</div>
+
+<div style="position: absolute; left: @(EndX)px; top: @(EndY)px">
+    <div style="position: relative;top: -50%;left: -50%">
+        @End
+    </div>
+</div>
+
+
+@code {
+    private LinePart _line;
+
+    [Parameter] public float StartX { get; set; }
+    [Parameter] public float StartY { get; set; }
+    [Parameter] public float EndX { get; set; }
+    [Parameter] public float EndY { get; set; }
+
+    public float MidX  { get{ return (EndX - StartX) / 2; }}
+    public float MidY  { get{ return (EndY - StartY) / 2; }}
+
+    [Parameter] public RenderFragment Start { get; set; }
+    [Parameter] public RenderFragment Center { get; set; }
+    [Parameter] public RenderFragment End { get; set; }
+
+    [Parameter] public PenSettings PenSettings { get; set; } = new PenSettings();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+
+        _line = new LinePart();
+        _line.Start = new System.Numerics.Vector2(StartX, StartY);
+        _line.End = new System.Numerics.Vector2(EndX, EndY);
+        _line.PenSettings = PenSettings;
+    }
+
+    public override void Render(IPrimitveDrawer backend)
+    {
+        _line.Render(backend);
+    }
+}
+

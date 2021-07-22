@@ -1,0 +1,25 @@
+﻿@inherits BasePart
+@using TLS.CanvasExtended.Backend
+
+<div style="position: absolute; left: @(X)px; top: @(Y)px">
+    <div style="position: relative;top: -50%;left: -50%">
+        @UI
+    </div>
+</div>
+
+@code {
+    
+    [Parameter] public float X { get; set; }
+    [Parameter] public float Y { get; set; }    
+    [Parameter] public RenderFragment UI { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();       
+    }
+
+    public override void Render(IPrimitveDrawer backend)
+    {
+        
+    }
+}

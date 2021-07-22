@@ -1,0 +1,73 @@
+﻿@using Blazor.Extensions.Canvas
+@using Blazor.Extensions.Canvas.Canvas2D
+@using Blazor.Extensions
+@using System.Numerics
+@using TLS.CanvasExtended.Backend
+@using TLS.CanvasExtended.Part
+
+<div>
+    <div style="position: absolute;" @onclick="CanvasClick">
+    <BECanvas Width="@Width" Height="@Height" @ref="_canvasReference" ></BECanvas>
+    </div>
+
+    <div style="transform: scale(@zoomFactor); transform-origin: 0% 0% 0px; position: absolute;">       
+        <CascadingValue Value=@PartManager>
+            @ChildContent
+        </CascadingValue>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int Width { get; set; }
+
+    [Parameter] public int Height { get; set; }
+
+    public PartManager PartManager { get; private set; }
+
+    private Canvas2DContext _context;
+    private IBackend _backend;
+    private IBackendHost _backendHost;
+
+    protected BECanvasComponent _canvasReference;
+
+    private double zoomFactor;
+
+    public CanvasExtended() : base()
+    {
+        PartManager = new PartManager();
+        zoomFactor = 1;
+    }
+
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {     
+        await base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            this._context = await this._canvasReference.CreateCanvas2DAsync();
+            var backend = new BECanvasBackend(_context, PartManager, Width, Height);
+            this._backend = backend;
+            this._backendHost = backend;
+        }
+
+        await _backend.Clear();
+        await _backend.SetScale(zoomFactor);
+        await _backend.RenderParts();
+    }
+
+    private async Task CanvasClick(MouseEventArgs args)
+    {
+        //TODO: Suppress render event
+
+        await _backendHost.PassClick(new Vector2
+            {
+                X = (float)args.OffsetX,
+                Y = (float)args.OffsetY
+            });           
+    }
+}

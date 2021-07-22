@@ -1,0 +1,31 @@
+﻿@inherits BasePart
+@using TLS.CanvasExtended.Backend
+
+<LineUIPart StartX="@StartX" StartY="@StartY" EndX="@EndX" EndY="@EndY" PenSettings="@PenSettings">
+    <Start>
+       @GridName 
+    </Start>
+</LineUIPart>
+
+@code {
+
+    [Parameter] public float StartX { get; set; }
+    [Parameter] public float StartY { get; set; }
+    [Parameter] public float EndX { get; set; }
+    [Parameter] public float EndY { get; set; }
+    [Parameter] public string GridName { get; set; }
+
+    [Parameter] public PenSettings PenSettings { get; set; } = new PenSettings();
+
+    public GridLineUIPart()
+    {
+        PenSettings = new PenSettings();
+        PenSettings.GapLength = 10;
+        PenSettings.DashLength = 10;
+    }
+
+    public override void Render(IPrimitveDrawer backend)
+    {        
+    }
+
+}

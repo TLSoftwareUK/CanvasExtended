@@ -1,0 +1,45 @@
+﻿@page "/"
+@using TLS.CanvasExtended.Part
+@using TLS.CanvasExtended
+@using System.Numerics
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<CanvasExtended Height="600" Width="600" @ref="_canvas">
+    <TLS.CanvasExtended.Part.UIPart.LineUIPart StartX="0" StartY="0" EndX="100" EndY="100">
+        <Start>Start</Start>
+        <Center>Center</Center>
+        <End>End</End>
+    </TLS.CanvasExtended.Part.UIPart.LineUIPart>
+    <TLS.CanvasExtended.Part.UIPart.GridLineSystemUIPart NodeCoordinates="@NodeCoordinates" />
+</CanvasExtended>
+
+@code{
+    CanvasExtended _canvas;
+    public IEnumerable<Vector2> NodeCoordinates { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        NodeCoordinates = new List<Vector2>()
+        {
+            new Vector2()
+            {
+                X = 100,
+                Y = 100
+            },
+            new Vector2()
+            {
+                X = 200,
+                Y = 100
+            },
+            new Vector2()
+            {
+                X = 120,
+                Y = 160
+            }
+        };
+    }
+}
