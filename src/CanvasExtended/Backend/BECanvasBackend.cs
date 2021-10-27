@@ -37,8 +37,7 @@ namespace TLS.CanvasExtended.Backend
               await _context.SetFillStyleAsync("aliceblue");
             #else
               await _context.SetFillStyleAsync("lightgrey");
-            #endif
-
+            #endif                
             
             await _context.FillRectAsync(0, 0, _width, _height);
         }

@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using TLS.CanvasExtended.Part
+@using TLS.CanvasExtended.Part.UIPart
 @using TLS.CanvasExtended
 @using System.Numerics
 
@@ -8,12 +9,13 @@
 Welcome to your new app.
 
 <CanvasExtended Height="600" Width="600" @ref="_canvas">
-    <TLS.CanvasExtended.Part.UIPart.LineUIPart StartX="0" StartY="0" EndX="100" EndY="100">
+    <GridUIPart/>
+    <LineUIPart StartX="0" StartY="0" EndX="100" EndY="100">
         <Start>Start</Start>
         <Center>Center</Center>
         <End>End</End>
-    </TLS.CanvasExtended.Part.UIPart.LineUIPart>
-    <TLS.CanvasExtended.Part.UIPart.GridLineSystemUIPart NodeCoordinates="@NodeCoordinates" />
+    </LineUIPart>
+    <GridLineSystemUIPart NodeCoordinates="@NodeCoordinates" />
 </CanvasExtended>
 
 @code{

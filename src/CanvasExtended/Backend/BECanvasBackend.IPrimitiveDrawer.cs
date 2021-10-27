@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Microsoft.AspNetCore.Components;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace TLS.CanvasExtended.Backend
@@ -14,6 +15,11 @@ namespace TLS.CanvasExtended.Backend
             await _context.LineToAsync(end.X, end.Y);
             await _context.StrokeAsync();
             await _context.SetLineDashAsync(new float[] { });
+        }
+
+        public async Task DrawImage(ElementReference image, Vector2 location)
+        {
+            await _context.DrawImageAsync(image, location.X, location.Y);
         }
     }
 }

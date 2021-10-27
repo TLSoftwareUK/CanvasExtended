@@ -10,7 +10,7 @@
     <BECanvas Width="@Width" Height="@Height" @ref="_canvasReference" ></BECanvas>
     </div>
 
-    <div style="transform: scale(@zoomFactor); transform-origin: 0% 0% 0px; position: absolute;">       
+    <div style="transform: scale(@zoomFactor); transform-origin: 0% 0% 0px; position: absolute; width: @(Width)px; height: @(Height)px;">       
         <CascadingValue Value=@PartManager>
             @ChildContent
         </CascadingValue>
