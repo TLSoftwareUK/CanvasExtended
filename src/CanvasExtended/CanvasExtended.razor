@@ -5,12 +5,12 @@
 @using TLS.CanvasExtended.Backend
 @using TLS.CanvasExtended.Part
 
-<div>
-    <div style="position: absolute;" @onclick="CanvasClick">
+<div @onclick="CanvasClick" @onmousewheel="CanvasWheel" @onwheel="CanvasWheel" style="position: relative; overflow: hidden; width: @(Width)px; height: @(Height)px; ">
+    <div style="position: absolute">
     <BECanvas Width="@Width" Height="@Height" @ref="_canvasReference" ></BECanvas>
     </div>
 
-    <div style="transform: scale(@zoomFactor); transform-origin: 0% 0% 0px; position: absolute; width: @(Width)px; height: @(Height)px;">       
+    <div style="transform: scale(@zoomFactor); transform-origin: 0% 100% 0px; position: absolute; width: @(Width)px; height: @(Height)px; overflow: hidden">       
         <CascadingValue Value=@PartManager>
             <CascadingValue Value=@Height>
                 @ChildContent
@@ -52,8 +52,7 @@
     {
         if (firstRender)
         {
-            this._context = await this._canvasReference.CreateCanvas2DAsync();
-            await this._context.TransformAsync(1, 0, 0, -1, 0, Height);
+            this._context = await this._canvasReference.CreateCanvas2DAsync();            
             var backend = new BECanvasBackend(_context, PartManager, Width, Height);
             this._backend = backend;
             this._backendHost = backend;
@@ -65,6 +64,7 @@
     private async Task Render()
     {
         await _backend.Clear();
+        await this._context.TransformAsync(1, 0, 0, -1, 0, Height);
         await _backend.SetScale(zoomFactor);
         await _backend.RenderParts();
     }
@@ -78,5 +78,12 @@
                 X = (float)args.OffsetX,
                 Y = (float)args.OffsetY
             });           
+    }
+
+    private async Task CanvasWheel(WheelEventArgs args)
+    {
+        double scroll = args.DeltaY;
+        zoomFactor += scroll * 0.005;
+        StateHasChanged();
     }
 }

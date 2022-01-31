@@ -24,13 +24,13 @@ namespace TLS.CanvasExtended.Backend
         }
 
         public async Task RenderParts()
-        {
-            await Clear();
+        {            
             await _partManager.Render(this);
         }
 
         public async Task Clear()
-        {
+        {            
+            await _context.SetTransformAsync(1, 0, 0, 1, 0, 0);
             await _context.ClearRectAsync(0, 0, _width, _height);
 
             #if DEBUG
