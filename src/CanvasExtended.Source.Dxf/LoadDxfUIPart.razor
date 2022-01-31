@@ -1,0 +1,29 @@
+﻿@using TLS.CanvasExtended.Backend
+@using TLS.CanvasExtended.Part
+@using System.Net;
+@inherits BasePart
+@inject NavigationManager NavigationManager
+
+@code {
+
+    [Parameter] public string Url { get; set; }
+
+    private Stream _dxf;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        HttpClient client = new HttpClient();
+        client.BaseAddress = new Uri(NavigationManager.BaseUri);
+        _dxf = await client.GetStreamAsync(Url);
+        PartManager.Redraw();
+    }
+
+    public async override Task Render(IPrimitiveDrawer backend)
+    {
+        if (_dxf != null)
+        {
+            await backend.RenderDxf(_dxf);
+        }
+    }
+}

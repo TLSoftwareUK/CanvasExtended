@@ -1,9 +1,10 @@
-﻿using TLS.CanvasExtended.Backend;
+﻿using System.Threading.Tasks;
+using TLS.CanvasExtended.Backend;
 
 namespace TLS.CanvasExtended.Part
 {
     public interface IPart
     {
-        void Render(IPrimitveDrawer backend);
+        Task Render(IPrimitiveDrawer backend);
     }
 }

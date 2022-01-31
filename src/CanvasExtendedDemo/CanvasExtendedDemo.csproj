@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CanvasExtended.Source.Dxf\CanvasExtended.Source.Dxf.csproj" />
     <ProjectReference Include="..\CanvasExtended\CanvasExtended.csproj" />
   </ItemGroup>
 

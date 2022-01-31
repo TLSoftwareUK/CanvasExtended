@@ -17,7 +17,7 @@ namespace TLS.CanvasExtended.Part.UIPart
         }
 
 
-        public void Render(IPrimitveDrawer backend)
+        public async Task Render(IPrimitiveDrawer backend)
         {
             SubPart.Render(backend);
         }

@@ -11,7 +11,7 @@ namespace TLS.CanvasExtended.Backend
 
         Task Clear();
 
-        IPrimitveDrawer GetPrimitiveDrawer();
+        IPrimitiveDrawer GetPrimitiveDrawer();
 
         Task<Vector2?> GetClickAsync();
     }

@@ -1,0 +1,17 @@
+﻿@page "/dxf"
+@using TLS.CanvasExtended.Part
+@using TLS.CanvasExtended.Part.UIPart
+@using TLS.CanvasExtended.Source.Dxf
+@using TLS.CanvasExtended
+@using System.Numerics
+
+<h1>DXF Demo</h1>
+
+<CanvasExtended Height="800" Width="800" @ref="_canvas">    
+    <LoadDxfUIPart Url="test.dxf"/>
+</CanvasExtended>
+
+@code{
+    CanvasExtended _canvas;    
+    
+}

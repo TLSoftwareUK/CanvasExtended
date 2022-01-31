@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Blazor.Extensions.Canvas.Canvas2D;
 using TLS.CanvasExtended.Backend;
 
 namespace TLS.CanvasExtended.Part
@@ -12,17 +9,24 @@ namespace TLS.CanvasExtended.Part
     {
         public List<IPart> Parts { get; private set; }
 
+        public event EventHandler? RedrawRequested;
+
         public PartManager()
         {
             Parts = new List<IPart>();
         }
 
-        public async Task Render(IPrimitveDrawer backend)
+        public async Task Render(IPrimitiveDrawer backend)
         {
             foreach (IPart part in Parts)
             {
-                part.Render(backend);
+                await part.Render(backend);
             }
+        }
+
+        public void Redraw()
+        {
+            RedrawRequested?.Invoke(this, new EventArgs());
         }
     }
 }

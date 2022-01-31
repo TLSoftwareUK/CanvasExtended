@@ -12,7 +12,9 @@
 
     <div style="transform: scale(@zoomFactor); transform-origin: 0% 0% 0px; position: absolute; width: @(Width)px; height: @(Height)px;">       
         <CascadingValue Value=@PartManager>
-            @ChildContent
+            <CascadingValue Value=@Height>
+                @ChildContent
+            </CascadingValue>
         </CascadingValue>
     </div>
 </div>
@@ -35,6 +37,7 @@
     public CanvasExtended() : base()
     {
         PartManager = new PartManager();
+        PartManager.RedrawRequested += async (sender, e) => { await Render(); };
         zoomFactor = 1;
     }
 
@@ -50,11 +53,17 @@
         if (firstRender)
         {
             this._context = await this._canvasReference.CreateCanvas2DAsync();
+            await this._context.TransformAsync(1, 0, 0, -1, 0, Height);
             var backend = new BECanvasBackend(_context, PartManager, Width, Height);
             this._backend = backend;
             this._backendHost = backend;
         }
 
+        await Render();
+    }
+
+    private async Task Render()
+    {
         await _backend.Clear();
         await _backend.SetScale(zoomFactor);
         await _backend.RenderParts();

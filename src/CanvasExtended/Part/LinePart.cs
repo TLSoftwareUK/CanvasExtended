@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Threading.Tasks;
 using TLS.CanvasExtended.Backend;
 
 namespace TLS.CanvasExtended.Part
@@ -16,9 +17,9 @@ namespace TLS.CanvasExtended.Part
             PenSettings = new PenSettings();
         }
 
-        public void Render(IPrimitveDrawer backend)
+        public async Task Render(IPrimitiveDrawer backend)
         {            
-            backend.DrawLine(Start, End, PenSettings);
+            await backend.DrawLine(Start, End, PenSettings);
         }
     }
 }

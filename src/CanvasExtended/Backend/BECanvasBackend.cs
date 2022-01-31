@@ -4,7 +4,7 @@ using TLS.CanvasExtended.Part;
 
 namespace TLS.CanvasExtended.Backend
 {
-    public partial class BECanvasBackend : IBackend, IPrimitveDrawer, IBackendHost
+    public partial class BECanvasBackend : IBackend, IPrimitiveDrawer, IBackendHost
     {
         private Canvas2DContext _context;
         private PartManager _partManager;
@@ -42,7 +42,7 @@ namespace TLS.CanvasExtended.Backend
             await _context.FillRectAsync(0, 0, _width, _height);
         }
 
-        public IPrimitveDrawer GetPrimitiveDrawer()
+        public IPrimitiveDrawer GetPrimitiveDrawer()
         {
             return this;
         }

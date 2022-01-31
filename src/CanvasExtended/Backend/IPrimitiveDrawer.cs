@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TLS.CanvasExtended.Backend
 {
-    public interface IPrimitveDrawer
+    public interface IPrimitiveDrawer
     {
         Task DrawLine(Vector2 start,  Vector2 end, PenSettings penSettings);
 
