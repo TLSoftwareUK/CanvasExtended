@@ -17,8 +17,13 @@
 </svg>
 
 
-@code {
+@code {       
 
     protected ElementReference gridDef { get; set; }
+
+    public override (Vector2, Vector2) GetBounds()
+    {
+        return (Vector2.Zero, Vector2.Zero);
+    }
 
 }

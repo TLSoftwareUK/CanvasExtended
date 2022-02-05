@@ -15,7 +15,7 @@
     char yname = 'A';
     foreach (float y in YGrids)
     {
-        <GridLineUIPart StartX="@MinimumX" StartY="@y" EndX="@MaximumX" EndY="@y" GridName="@yname.ToString()"/>
+        <GridLineUIPart StartX="@MinimumX" StartY="@y" EndX="@MaximumX" EndY="@y" GridName="@yname.ToString()" @ref="Ref"/>
         yname++;
     }
 }
@@ -30,6 +30,9 @@
     protected float MaximumX { get; set; } = 250;
     protected float MinimumY { get; set; } = 50;
     protected float MaximumY { get; set; } = 250;
+
+    private List<GridLineUIPart> _refs  = new();
+    public GridLineUIPart Ref {set => _refs.Add(value); }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -53,5 +56,21 @@
         XGrids = XGrids.OrderBy(x => x).ToList();
         YGrids = YGrids.OrderBy(x => x).ToList();        
     }
+
+    public override (Vector2, Vector2) GetBounds()
+    {
+        Vector2 start = Vector2.Zero;
+        Vector2 end = Vector2.Zero;
+
+        foreach (GridLineUIPart part in _refs)
+        {
+            Vector2 newStart, newEnd;
+            (newStart, newEnd) = part.GetBounds();
+            (start, end) = ExtensionHelpers.CombineBounds(start, end, newStart, newEnd);
+        }
+
+        return (start, end);
+    }
 }
+
 

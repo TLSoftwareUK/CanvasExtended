@@ -10,7 +10,7 @@
     <BECanvas Width="@Width" Height="@Height" @ref="_canvasReference" ></BECanvas>
     </div>
 
-    <div style="transform: scale(@zoomFactor); transform-origin: 0% 100% 0px; position: absolute; width: @(Width)px; height: @(Height)px; overflow: hidden">       
+    <div style="transform: scale(@zoomFactor) translate(@(origin.X)px, @(-origin.Y)px); transition: transform 0.5s; transform-origin: 50% 50% 0px; position: absolute; width: @(Width)px; height: @(Height)px; overflow: hidden">       
         <CascadingValue Value=@PartManager>
             <CascadingValue Value=@Height>
                 @ChildContent
@@ -24,6 +24,10 @@
 
     [Parameter] public int Height { get; set; }
 
+    [Parameter] public bool ZoomEnable { get; set; } = true;
+
+    [Parameter] public bool PanEnable { get; set; } = true;
+
     public PartManager PartManager { get; private set; }
 
     private Canvas2DContext _context;
@@ -33,6 +37,16 @@
     protected BECanvasComponent _canvasReference;
 
     private double zoomFactor;
+    private Vector2 centroid = Vector2.Zero;
+    private Vector2 origin { get
+        {
+            return new Vector2()
+            {
+                X = Width / 2 - centroid.X,
+                Y = Height / 2 - centroid.Y
+            };
+        }
+    }
 
     public CanvasExtended() : base()
     {
@@ -55,23 +69,24 @@
             this._context = await this._canvasReference.CreateCanvas2DAsync();            
             var backend = new BECanvasBackend(_context, PartManager, Width, Height);
             this._backend = backend;
-            this._backendHost = backend;
+            this._backendHost = backend;            
+            await ZoomExtents();
         }
 
-        await Render();
+        await Render();        
     }
 
     private async Task Render()
     {
-        await _backend.Clear();
-        await this._context.TransformAsync(1, 0, 0, -1, 0, Height);
+        await _backend.Clear();                
         await _backend.SetScale(zoomFactor);
+        await _backend.SetOrigin(origin);
         await _backend.RenderParts();
     }
 
     private async Task CanvasClick(MouseEventArgs args)
     {
-        //TODO: Suppress render event
+        //TODO: Suppress render event        
 
         await _backendHost.PassClick(new Vector2
             {
@@ -82,8 +97,37 @@
 
     private async Task CanvasWheel(WheelEventArgs args)
     {
-        double scroll = args.DeltaY;
-        zoomFactor += scroll * 0.005;
+        if (ZoomEnable)
+        {
+            double scroll = args.DeltaY;
+            if (scroll > 0)
+            {
+                zoomFactor = zoomFactor / 2;
+            } else
+            {
+                zoomFactor = zoomFactor * 2;
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task ZoomExtents()
+    {
+        Vector2 start, end;
+        (start, end) = PartManager.GetBounds();
+
+        centroid = new Vector2()
+        {
+            X = ((end.X - start.X) / 2) + start.X,
+            Y = ((end.Y - start.Y) / 2) + start.Y
+        };
+
+        double xScale = Width / ((end.X - start.X)*1.4);
+        double yScale = Height / ((end.Y - start.Y)*1.4);
+
+        zoomFactor = Math.Max(xScale, yScale);
+
         StateHasChanged();
     }
 }

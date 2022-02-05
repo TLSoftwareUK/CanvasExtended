@@ -21,5 +21,10 @@ namespace TLS.CanvasExtended.Part
         {            
             await backend.DrawLine(Start, End, PenSettings);
         }
+
+        public (Vector2, Vector2) GetBounds()
+        {
+            return (Start, End);
+        }
     }
 }

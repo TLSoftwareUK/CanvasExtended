@@ -1,6 +1,7 @@
 ﻿@using TLS.CanvasExtended.Backend
 @using TLS.CanvasExtended.Part
 @using System.Net;
+@using System.Numerics;
 @inherits BasePart
 @inject NavigationManager NavigationManager
 
@@ -25,5 +26,10 @@
         {
             await backend.RenderDxf(_dxf);
         }
+    }
+
+    public override (Vector2, Vector2) GetBounds()
+    {
+        return (Vector2.Zero, Vector2.Zero);
     }
 }

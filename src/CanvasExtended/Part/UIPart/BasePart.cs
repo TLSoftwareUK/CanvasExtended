@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Numerics;
 using System.Threading.Tasks;
 using TLS.CanvasExtended.Backend;
 
@@ -31,5 +32,7 @@ namespace TLS.CanvasExtended.Part
         {
             return CanvasHeight - y;
         }
+
+        public abstract (Vector2, Vector2) GetBounds();
     }
 }

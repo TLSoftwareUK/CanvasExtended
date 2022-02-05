@@ -7,6 +7,8 @@ namespace TLS.CanvasExtended.Backend
     {
         Task SetScale(double zoom);
 
+        Task SetOrigin(Vector2 origin);
+
         Task RenderParts();
 
         Task Clear();

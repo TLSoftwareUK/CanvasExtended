@@ -1,7 +1,8 @@
 ﻿@inherits BasePart
 @using TLS.CanvasExtended.Backend
+@using System.Numerics
 
-<LineUIPart StartX="@StartX" StartY="@StartY" EndX="@EndX" EndY="@EndY" PenSettings="@PenSettings">
+<LineUIPart StartX="@StartX" StartY="@StartY" EndX="@EndX" EndY="@EndY" PenSettings="@PenSettings" @ref="_linePart">
     <Start>
        @GridName 
     </Start>
@@ -17,6 +18,8 @@
 
     [Parameter] public PenSettings PenSettings { get; set; } = new PenSettings();
 
+    private LineUIPart _linePart { get; set; }
+
     public GridLineUIPart()
     {
         PenSettings = new PenSettings();
@@ -24,4 +27,8 @@
         PenSettings.DashLength = 10;
     }
 
+    public override (Vector2, Vector2) GetBounds()
+    {
+        return _linePart.GetBounds();
+    }
 }

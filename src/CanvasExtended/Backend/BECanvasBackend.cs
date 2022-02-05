@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Diagnostics;
+using System.Numerics;
+using System.Threading;
+using System.Threading.Tasks;
 using Blazor.Extensions.Canvas.Canvas2D;
 using TLS.CanvasExtended.Part;
 
@@ -10,6 +14,9 @@ namespace TLS.CanvasExtended.Backend
         private PartManager _partManager;
         private int _width, _height;
 
+        private double _scale;
+               
+
         public BECanvasBackend(Canvas2DContext context, PartManager partManager, int width, int height)
         {
             _context = context;
@@ -20,7 +27,9 @@ namespace TLS.CanvasExtended.Backend
 
         public async Task SetScale(double zoom)
         {
-            await _context.ScaleAsync(zoom, zoom);
+            _scale = zoom;
+            await _context.TranslateAsync(_width / 2, _height / 2);
+            await _context.ScaleAsync(zoom, zoom);            
         }
 
         public async Task RenderParts()
@@ -39,12 +48,18 @@ namespace TLS.CanvasExtended.Backend
               await _context.SetFillStyleAsync("lightgrey");
             #endif                
             
-            await _context.FillRectAsync(0, 0, _width, _height);
+            await _context.FillRectAsync(0, 0, _width, _height);            
+            await this._context.TransformAsync(1, 0, 0, -1, 0, _height);
         }
 
         public IPrimitiveDrawer GetPrimitiveDrawer()
         {
             return this;
+        }
+
+        public async Task SetOrigin(Vector2 origin)
+        {
+            await _context.TranslateAsync((-_width / 2) + origin.X, (-_height / 2) + origin.Y);
         }
     }
 }
