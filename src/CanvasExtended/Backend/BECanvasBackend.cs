@@ -8,7 +8,7 @@ using TLS.CanvasExtended.Part;
 
 namespace TLS.CanvasExtended.Backend
 {
-    public partial class BECanvasBackend : IBackend, IPrimitiveDrawer, IBackendHost
+    public partial class BECanvasBackend : IBackend, IPrimitiveDrawer, IBackendHost, ICanvasInteractions
     {
         private Canvas2DContext _context;
         private PartManager _partManager;
@@ -33,7 +33,8 @@ namespace TLS.CanvasExtended.Backend
         }
 
         public async Task RenderParts()
-        {            
+        {
+            Console.WriteLine($"Parts {_partManager.Parts.Count}");
             await _partManager.Render(this);
         }
 

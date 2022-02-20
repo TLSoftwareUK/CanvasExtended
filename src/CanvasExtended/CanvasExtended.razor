@@ -5,21 +5,33 @@
 @using TLS.CanvasExtended.Backend
 @using TLS.CanvasExtended.Part
 
-<div @onclick="CanvasClick" @onmousewheel="CanvasWheel" @onwheel="CanvasWheel" style="position: relative; overflow: hidden; width: @(Width)px; height: @(Height)px; ">
-    <div style="position: absolute">
-    <BECanvas Width="@Width" Height="@Height" @ref="_canvasReference" ></BECanvas>
-    </div>
+<ErrorBoundary>
+    <ChildContent>
+        <div @onclick="CanvasClick" @onmousewheel="CanvasWheel" @onwheel="CanvasWheel" style="position: relative; overflow: hidden; width: @(Width)px; height: @(Height)px; ">
+            <div style="position: absolute; pointer-events: none;">
+                <BECanvas Width="@Width" Height="@Height" @ref="_canvasReference" ></BECanvas>
+            </div>
 
-    <div style="transform: scale(@zoomFactor) translate(@(origin.X)px, @(-origin.Y)px); transition: transform 0.5s; transform-origin: 50% 50% 0px; position: absolute; width: @(Width)px; height: @(Height)px; overflow: hidden">       
-        <CascadingValue Value=@PartManager>
-            <CascadingValue Value=@Height>
-                @ChildContent
-            </CascadingValue>
-        </CascadingValue>
-    </div>
-</div>
+            <div style="transform: scale(@zoomFactor) translate(@(origin.X)px, @(-origin.Y)px); transition: transform 0.5s; transform-origin: 50% 50% 0px; position: absolute; width: @(Width)px; height: @(Height)px; pointer-events: none;">       
+                <CascadingValue Value=@PartManager>
+                    <CascadingValue Value=@Height>
+                        @ChildContent
+                    </CascadingValue>
+                </CascadingValue>
+            </div>
+        </div>
+    </ChildContent>
+    <ErrorContent>
+        <div style="position: relative; overflow: hidden; width: @(Width)px; height: @(Height)px; background-color: lightgray;">
+            <p style="position: absolute; top: 50%; left: 50%; margin: -25px 0 0 -25px;">Error rendering component</p>
+        </div>
+    </ErrorContent>
+</ErrorBoundary>
+
 
 @code {
+    private ErrorBoundary bound;
+
     [Parameter] public int Width { get; set; }
 
     [Parameter] public int Height { get; set; }
@@ -48,12 +60,14 @@
         }
     }
 
+    public ICanvasInteractions Interactions { get; private set; }
+
     public CanvasExtended() : base()
     {
         PartManager = new PartManager();
         PartManager.RedrawRequested += async (sender, e) => { await Render(); };
         zoomFactor = 1;
-    }
+    }    
 
     [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -63,13 +77,14 @@
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
+    {        
         if (firstRender)
-        {
+        {            
             this._context = await this._canvasReference.CreateCanvas2DAsync();            
             var backend = new BECanvasBackend(_context, PartManager, Width, Height);
             this._backend = backend;
-            this._backendHost = backend;            
+            this._backendHost = backend;
+            this.Interactions = backend;
             await ZoomExtents();
         }
 
@@ -77,7 +92,13 @@
     }
 
     private async Task Render()
-    {
+    {        
+        if (_backend == null)
+        {
+            Console.WriteLine("Backend during render");
+            return;
+        }
+
         await _backend.Clear();                
         await _backend.SetScale(zoomFactor);
         await _backend.SetOrigin(origin);
@@ -87,11 +108,18 @@
     private async Task CanvasClick(MouseEventArgs args)
     {
         //TODO: Suppress render event        
+        Console.WriteLine($"Click: X{args.OffsetX}, Y{Height - args.OffsetY}");
+        Console.WriteLine($"Scale: {zoomFactor}");
+        Console.WriteLine($"Translate: X{origin.X}, Y{origin.Y}");
 
+        double X = (args.OffsetX - Width / 2) / zoomFactor + centroid.X;
+        double Y = (Height - args.OffsetY - Height / 2) / zoomFactor + centroid.Y;
+
+        Console.WriteLine($"X{X}, Y{Y}");
         await _backendHost.PassClick(new Vector2
             {
-                X = (float)args.OffsetX,
-                Y = (float)args.OffsetY
+                X = (float)X,
+                Y = (float)Y
             });           
     }
 
@@ -116,18 +144,29 @@
     {
         Vector2 start, end;
         (start, end) = PartManager.GetBounds();
+        Console.WriteLine($"Extent bounds {start} to {end}");
 
         centroid = new Vector2()
         {
             X = ((end.X - start.X) / 2) + start.X,
             Y = ((end.Y - start.Y) / 2) + start.Y
         };
+        Console.WriteLine($"Centroid {centroid}");
 
         double xScale = Width / ((end.X - start.X)*1.4);
         double yScale = Height / ((end.Y - start.Y)*1.4);
 
+        if (!double.IsFinite(xScale))
+            xScale = 1;
+
+        if (!double.IsFinite(yScale))
+            yScale = 1;
+
         zoomFactor = Math.Max(xScale, yScale);
+        zoomFactor = 1;
+
+        Console.WriteLine($"X scale {xScale}, Y scale {yScale}, Scale {zoomFactor}");
 
         StateHasChanged();
-    }
+    }    
 }

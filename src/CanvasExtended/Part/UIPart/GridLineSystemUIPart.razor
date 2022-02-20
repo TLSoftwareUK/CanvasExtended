@@ -22,6 +22,7 @@
 
 @code {
     [Parameter] public IEnumerable<Vector2> NodeCoordinates { get; set; }
+    [Parameter] public float Extension { get; set; } = 50;
 
     protected List<float> XGrids;
     protected List<float> YGrids;
@@ -41,20 +42,29 @@
         XGrids = new List<float>();
         YGrids = new List<float>();
 
-        foreach(Vector2 node in NodeCoordinates)
+        if (NodeCoordinates.Any())
         {
-            if(!XGrids.Any(x => x == node.X))
+            foreach (Vector2 node in NodeCoordinates)
             {
-                XGrids.Add(node.X);
+                if (!XGrids.Any(x => x == node.X))
+                {
+                    XGrids.Add(node.X);
+                }
+                if (!YGrids.Any(y => y == node.Y))
+                {
+                    YGrids.Add(node.Y);
+                }
             }
-            if(!YGrids.Any(y => y ==node.Y))
-            {
-                YGrids.Add(node.Y);
-            }
-        }
 
-        XGrids = XGrids.OrderBy(x => x).ToList();
-        YGrids = YGrids.OrderBy(x => x).ToList();        
+            XGrids = XGrids.OrderBy(x => x).ToList();
+            YGrids = YGrids.OrderBy(x => x).ToList();
+
+            MinimumX = XGrids.First() - Extension;
+            MaximumX = XGrids.Last() + Extension;
+
+            MinimumY = YGrids.First() - Extension;
+            MaximumY = YGrids.Last() + Extension;
+        }
     }
 
     public override (Vector2, Vector2) GetBounds()

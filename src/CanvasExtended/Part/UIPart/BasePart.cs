@@ -24,7 +24,9 @@ namespace TLS.CanvasExtended.Part
 
         protected override Task OnParametersSetAsync()
         {
-            PartManager.Parts.Add(this);
+            if(!PartManager.Parts.Contains(this))
+                PartManager.Parts.Add(this);
+
             return base.OnParametersSetAsync();
         }
 

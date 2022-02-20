@@ -39,6 +39,7 @@ namespace TLS.CanvasExtended.Part
             {
                 Vector2 newStart, newEnd;
                 (newStart, newEnd) = part.GetBounds();
+                Console.WriteLine($"Extent bounds {newStart} to {newEnd}");
                 (start, end) = ExtensionHelpers.CombineBounds(start, end, newStart, newEnd);
             }
 

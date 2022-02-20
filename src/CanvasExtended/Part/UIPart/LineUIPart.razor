@@ -3,19 +3,19 @@
 @using System.Numerics;
 
 <div style="position: absolute; left: @(StartX)px; top: @(InvertY(StartY))px">
-    <div style="position: relative;top: -50%;left: -50%">
+    <div style="position: relative;top: -50%;left: -50%; transform: scale(0.25);">
         @Start
     </div>
 </div>
 
 <div style="position: absolute; left: @(MidX)px; top: @(InvertY(MidY))px">
-    <div style="position: relative;top: -50%;left: -50%">
+    <div style="position: relative;top: -50%;left: -50%; transform: scale(0.25);">
         @Center
     </div>
 </div>
 
 <div style="position: absolute; left: @(EndX)px; top: @(InvertY(EndY))px">
-    <div style="position: relative;top: -50%;left: -50%">
+    <div style="position: relative;top: -50%;left: -50%; transform: scale(0.25);">
         @End
     </div>
 </div>
@@ -50,7 +50,7 @@
 
     public async override Task Render(IPrimitiveDrawer backend)
     {
-        await _line.Render(backend);
+        await _line.Render(backend);        
     }
 
     public override (Vector2, Vector2) GetBounds()

@@ -6,23 +6,23 @@ namespace TLS.CanvasExtended.Backend
     public partial class BECanvasBackend 
     {
         private Vector2? _clickLocation;
+        TaskCompletionSource<Vector2?>? continueClick;
 
         public async Task PassClick(Vector2 location)
         {            
             _clickLocation = location;
+            if(continueClick != null)
+                continueClick.TrySetResult(location);
         }
 
-        public async Task<Vector2?> GetClickAsync()
+        public async Task<Vector2?> GetPositionAsync()
         {
-            while (!_clickLocation.HasValue)
-            {
-                await Task.Delay(100);
-            }
+            await Task.Delay(500);
+            continueClick = new TaskCompletionSource<Vector2?>();
+            Vector2? result = await continueClick.Task;
+            continueClick = null;
 
-            Vector2? result = _clickLocation.Value;
-            _clickLocation = null;
-
-            return result;            
+            return result;
         }
     }
 }

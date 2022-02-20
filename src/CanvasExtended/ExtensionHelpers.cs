@@ -23,7 +23,7 @@ namespace TLS.CanvasExtended
                 Y = oEnd.Y < nEnd.Y ? nEnd.Y : oEnd.Y
             };
 
-            if (oStart == Vector2.Zero)
+            /*if (oStart == Vector2.Zero)
                 outStart = nStart;
 
             if (nStart == Vector2.Zero)
@@ -33,7 +33,7 @@ namespace TLS.CanvasExtended
                 outEnd = nEnd;
 
             if (nStart == Vector2.Zero)
-                outEnd = oEnd;
+                outEnd = oEnd;*/
 
             return (outStart, outEnd);
         }
