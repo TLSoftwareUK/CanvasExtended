@@ -2,29 +2,48 @@
 @using TLS.CanvasExtended.Part
 @using System.Net;
 @using System.Numerics;
+@using netDxf
+@using netDxf.Objects
 @inherits BasePart
 @inject NavigationManager NavigationManager
+@using Vector2 = System.Numerics.Vector2;
 
 @code {
 
     [Parameter] public string Url { get; set; }
 
+    private string loadedUrl;
     private Stream _dxf;
+    private DxfDocument _loadedDoc;
 
     protected async override Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        HttpClient client = new HttpClient();
-        client.BaseAddress = new Uri(NavigationManager.BaseUri);
-        _dxf = await client.GetStreamAsync(Url);
+        if (Url != loadedUrl)
+            await LoadDxf();
+
         PartManager.Redraw();
     }
 
-    public async override Task Render(IPrimitiveDrawer backend)
+    private async Task LoadDxf()
     {
+        HttpClient client = new HttpClient();
+        client.BaseAddress = new Uri(NavigationManager.BaseUri);
+        _dxf = await client.GetStreamAsync(Url);
+
+        Console.WriteLine("Loading dxf");
+        _loadedDoc = DxfDocument.Load(_dxf);
+        Console.WriteLine("Loaded");
+        _loadedDoc.ActiveLayout = Layout.ModelSpaceName;
+
+        loadedUrl = Url;
+    }
+
+    public async override Task Render(IPrimitiveDrawer backend)
+    {        
         if (_dxf != null)
         {
-            await backend.RenderDxf(_dxf);
+            await backend.RenderDxf(_loadedDoc, CanvasX, CanvasY, CanvasWidth, CanvasHeight);
         }
     }
 

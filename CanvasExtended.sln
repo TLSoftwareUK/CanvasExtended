@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CanvasExtended.Source.Dxf",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CanvasExtendedDemo", "src\CanvasExtendedDemo\CanvasExtendedDemo.csproj", "{F7488190-1B33-49CE-AEB9-07955FECB1CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DxfTestProject", "src\DxfTestProject\DxfTestProject.csproj", "{E27876F5-F742-43E3-BC18-021EC0BACC02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F7488190-1B33-49CE-AEB9-07955FECB1CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7488190-1B33-49CE-AEB9-07955FECB1CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7488190-1B33-49CE-AEB9-07955FECB1CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E27876F5-F742-43E3-BC18-021EC0BACC02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E27876F5-F742-43E3-BC18-021EC0BACC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E27876F5-F742-43E3-BC18-021EC0BACC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E27876F5-F742-43E3-BC18-021EC0BACC02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

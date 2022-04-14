@@ -15,7 +15,11 @@ namespace TLS.CanvasExtended.Backend
         private int _width, _height;
 
         private double _scale;
-               
+        private Vector2 _origin;
+
+        private double _actualWidth { get { return (double)_width / _scale; } }
+        private double _actualHeight { get { return (double)_height / _scale; } }
+
 
         public BECanvasBackend(Canvas2DContext context, PartManager partManager, int width, int height)
         {
@@ -60,6 +64,7 @@ namespace TLS.CanvasExtended.Backend
 
         public async Task SetOrigin(Vector2 origin)
         {
+            _origin = new Vector2(origin.X - _width/2, origin.Y - _height/2);
             await _context.TranslateAsync((-_width / 2) + origin.X, (-_height / 2) + origin.Y);
         }
     }

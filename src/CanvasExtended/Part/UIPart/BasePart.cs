@@ -11,9 +11,18 @@ namespace TLS.CanvasExtended.Part
         [CascadingParameter]
         protected PartManager PartManager { get; set; }
 
-        [CascadingParameter]
-        protected int CanvasHeight { get; set; } 
+        [CascadingParameter(Name = "CanvasHeight")]
+        protected int CanvasHeight { get; set; }
 
+        [CascadingParameter(Name = "CanvasWidth")]
+        protected int CanvasWidth { get; set; }
+
+        [CascadingParameter(Name = "CanvasX")]
+        protected float CanvasX { get; set; }
+
+        [CascadingParameter(Name = "CanvasY")]
+        protected float CanvasY { get; set; }
+        
         public async ValueTask DisposeAsync()
         {
             PartManager?.Parts?.Remove(this);

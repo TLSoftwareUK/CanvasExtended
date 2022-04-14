@@ -14,9 +14,15 @@
 
             <div style="transform: scale(@zoomFactor) translate(@(origin.X)px, @(-origin.Y)px); transition: transform 0.5s; transform-origin: 50% 50% 0px; position: absolute; width: @(Width)px; height: @(Height)px; pointer-events: none;">       
                 <CascadingValue Value=@PartManager>
-                    <CascadingValue Value=@Height>
-                        @ChildContent
-                    </CascadingValue>
+                    <CascadingValue Value=@Height Name="CanvasHeight">
+                        <CascadingValue Value=@Width Name="CanvasWidth">
+                            <CascadingValue Value=@origin.X Name="CanvasX">
+                                <CascadingValue Value=@origin.Y Name="CanvasY">
+                                    @ChildContent
+                                </CascadingValue>
+                            </CascadingValue>
+                        </CascadingValue>                        
+                    </CascadingValue>                    
                 </CascadingValue>
             </div>
         </div>

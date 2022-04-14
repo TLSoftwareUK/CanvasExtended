@@ -1,4 +1,5 @@
-﻿using netDxf.Entities;
+﻿using netDxf;
+using netDxf.Entities;
 using TLS.CanvasExtended.Backend;
 
 namespace TLS.CanvasExtended.Source.Dxf
@@ -8,7 +9,7 @@ namespace TLS.CanvasExtended.Source.Dxf
         public static async Task DrawLines(IPrimitiveDrawer drawer, IEnumerable<Line> lines)
         {            
             PenSettings settings = new PenSettings();
-
+                        
             foreach (Line line in lines)
             {               
                await drawer.DrawLine(line.StartPoint.GetFlatVector2(), line.EndPoint.GetFlatVector2(), settings);
@@ -47,6 +48,6 @@ namespace TLS.CanvasExtended.Source.Dxf
                     await drawer.DrawLine(line.Vertexes[line.Vertexes.Count - 1].Position.GetVector2(), line.Vertexes[0].Position.GetVector2(), settings);
                 }
             }
-        }
+        }        
     }
 }
