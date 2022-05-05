@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
 	<Nullable>enable</Nullable>
     <RootNamespace>TLS.CanvasExtended</RootNamespace>
-    <AssemblyName>TLS.CanvasExtended</AssemblyName>
+    <AssemblyName>TLS.CanvasExtended</AssemblyName>	
   </PropertyGroup>
 
   

@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<RootNamespace>TLS.CanvasExtended.Source.Dxf</RootNamespace>
-	<AssemblyName>TLS.CanvasExtended.Source.Dxf</AssemblyName>
+	<AssemblyName>TLS.CanvasExtended.Source.Dxf</AssemblyName>	
   </PropertyGroup>
 
   <ItemGroup>

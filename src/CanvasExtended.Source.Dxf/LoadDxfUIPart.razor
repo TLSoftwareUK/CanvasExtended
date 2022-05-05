@@ -3,6 +3,7 @@
 @using System.Net;
 @using System.Numerics;
 @using netDxf
+@using netDxf.Entities
 @using netDxf.Objects
 @inherits BasePart
 @inject NavigationManager NavigationManager
@@ -14,6 +15,8 @@
 
     private string loadedUrl;
     private Stream _dxf;
+
+    //TODO: Move to static cache as this calsss gets destroyed
     private DxfDocument _loadedDoc;
 
     protected async override Task OnParametersSetAsync()
@@ -49,6 +52,30 @@
 
     public override (Vector2, Vector2) GetBounds()
     {
+        //_loadedDoc.Lines
         return (Vector2.Zero, Vector2.Zero);
     }
+
+    public (Vector2, Vector2) GetLineBounds(IEnumerable<Line> lines)
+    {
+        Vector2? start = null;
+        Vector2? end = null; 
+
+        //TODO: Check start/end right way around
+
+        foreach(Line l in lines)
+        {
+            if(start == null)
+            {
+                start = new Vector2((float)l.StartPoint.X, (float)l.StartPoint.Y);
+            }
+            if(end == null)
+            {
+                start = new Vector2((float)l.EndPoint.X, (float)l.EndPoint.Y);
+            }
+
+
+        }
+    }          
+
 }
